@@ -12,7 +12,7 @@ plugins:
     enabled: true
   rubocop:
     enabled: true
-    channel: "channel/rubocop-0-92" # check version installed in Gemfile.base
+    channel: "rubocop-0-92"
   reek:
     enabled: true
   eslint:
@@ -45,6 +45,8 @@ exclude_patterns:
   - "public/themes/**/*"
   - "public/javascripts/vendor/*"
   - "public/fancybox/*"
+  - "public/assets"
+  - "public/packs"
   - 'lib/action_dispatch/rails5_ssl.rb'
   - "lib/developer_portal/app/views/developer_portal/javascripts/*"
   - "lib/developer_portal/app/views/developer_portal/css/*"
@@ -57,3 +59,4 @@ exclude_patterns:
   - "app/javascript/src/*/*/*.spec.*"
   - "bin/webpack*"
   - "**/node_modules/"
+  - "**/flow-typed"
