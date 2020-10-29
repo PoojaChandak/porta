@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200921135637) do
+ActiveRecord::Schema.define(version: 20201027020329) do
 
   create_table "access_tokens", force: :cascade do |t|
     t.integer  "owner_id",   precision: 38, null: false
@@ -1131,6 +1131,7 @@ ActiveRecord::Schema.define(version: 20200921135637) do
   end
 
   add_index "proxy_configs", ["proxy_id", "environment", "version"], name: "index_proxy_configs_on_proxy_id_and_environment_and_version"
+  add_index "proxy_configs", ["proxy_id", "environment"], name: "index_proxy_configs_on_proxy_id_and_environment"
   add_index "proxy_configs", ["proxy_id"], name: "index_proxy_configs_on_proxy_id"
   add_index "proxy_configs", ["user_id"], name: "index_proxy_configs_on_user_id"
 

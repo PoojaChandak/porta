@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200921135637) do
+ActiveRecord::Schema.define(version: 20201027020329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1078,6 +1078,7 @@ ActiveRecord::Schema.define(version: 20200921135637) do
     t.datetime "updated_at",                           null: false
     t.string   "hosts",       limit: 8192
     t.index ["proxy_id", "environment", "version"], name: "index_proxy_configs_on_proxy_id_and_environment_and_version", using: :btree
+    t.index ["proxy_id", "environment"], name: "index_proxy_configs_on_proxy_id_and_environment", using: :btree
     t.index ["proxy_id"], name: "index_proxy_configs_on_proxy_id", using: :btree
     t.index ["user_id"], name: "index_proxy_configs_on_user_id", using: :btree
   end
