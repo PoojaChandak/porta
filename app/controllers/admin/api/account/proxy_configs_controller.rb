@@ -35,7 +35,9 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
   private
 
   def proxy_configs
-    ProxyConfig.where(proxy_id: accessible_proxies_ids).by_environment(environment)
+    @proxy_configs ||= ProxyConfig.where(proxy_id: accessible_proxies_ids).by_environment(environment).tap do |configs|
+      configs.by_host(host) if host
+    end
   end
 
   def accessible_proxies_ids
@@ -48,5 +50,9 @@ class Admin::Api::Account::ProxyConfigsController < Admin::Api::BaseController
 
   def environment
     params.require(:environment)
+  end
+
+  def host
+    params.permit(:host)
   end
 end
