@@ -41,7 +41,7 @@ class FetchProxyConfigsService
   end
 
   def member_permission_service_ids
-    ids = (watcher.kind_of?(User) && watcher.forbidden_some_services?) ? watcher.member_permission_service_ids : nil
+    ids = watcher.try(:forbidden_some_services?) ? watcher.member_permission_service_ids : nil
     ids || accessible_services_ids
   end
 end
