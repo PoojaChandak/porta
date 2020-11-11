@@ -72,6 +72,9 @@ class FetchProxyConfigsServiceTest < ActiveSupport::TestCase
 
     proxy_configs_of_service = service.proxy.proxy_configs.where(proxy_id: service.proxy.id).by_environment(ProxyConfig::ENVIRONMENTS.first).select(:id).map(&:id)
     assert_same_elements proxy_configs_of_service, fetch_proxy_configs(owner: service).select(:id).map(&:id)
+
+    proxy_configs_of_another_owner_class = fetch_proxy_configs(owner: BackendApi.new).select(:id).map(&:id)
+    assert_empty proxy_configs_of_another_owner_class
   end
 
   test 'search filters by permissions' do
