@@ -129,6 +129,6 @@ class FetchProxyConfigsServiceTest < ActiveSupport::TestCase
   private
 
   def fetch_proxy_configs(environment: ProxyConfig::ENVIRONMENTS.first, owner: service, **options)
-    FetchProxyConfigsService.new(environment: environment, owner: owner, **options).call
+    FetchProxyConfigsService.call(environment: environment, owner: owner, **options)
   end
 end

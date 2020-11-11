@@ -22,6 +22,10 @@ class FetchProxyConfigsService
       .by_version(version)
   end
 
+  def self.call(**args)
+    new(**args).call
+  end
+
   private
 
   attr_reader :environment, :host, :version, :watcher, :owner
