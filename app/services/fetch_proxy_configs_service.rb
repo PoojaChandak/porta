@@ -35,9 +35,11 @@ class FetchProxyConfigsService
   end
 
   def accessible_services_ids
-    return [owner.id] if owner.kind_of?(Service)
-    return owner.accessible_services.pluck(:id) if owner.kind_of?(Account)
-    []
+    case owner
+    when Account then owner.accessible_services.pluck(:id)
+    when Service then [owner.id]
+    else []
+    end
   end
 
   def member_permission_service_ids
