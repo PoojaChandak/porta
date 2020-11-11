@@ -128,7 +128,8 @@ class FetchProxyConfigsServiceTest < ActiveSupport::TestCase
 
   private
 
-  def fetch_proxy_configs(environment: ProxyConfig::ENVIRONMENTS.first, owner: service, **options)
-    FetchProxyConfigsService.call(environment: environment, owner: owner, **options)
+  def fetch_proxy_configs(**args)
+    args.reverse_merge!(owner: service, environment: ProxyConfig::ENVIRONMENTS.first)
+    FetchProxyConfigsService.new(**args.slice(:owner, :watcher)).call(**args.slice(:environment, :version, :host))
   end
 end

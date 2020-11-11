@@ -1,20 +1,15 @@
 # frozen_string_literal: true
 
 class FetchProxyConfigsService
-  # TODO: too many params
-  def initialize(environment:, host: nil, version: nil, watcher: nil, owner:)
+  def initialize(watcher: nil, owner:)
     # watcher being the user/account who does the request (to check the permissions!)
     # owner being either the service that owns the proxy configs or the tenant who does
 
-    @environment = environment
-    @host = host
-    @version = version
     @watcher = watcher
     @owner = owner
   end
 
-  # TODO: maybe memoize because this is for the same params always (inside the same instance!)
-  def call
+  def call(environment:, host: nil, version: nil)
     ProxyConfig
       .where(proxy_id: proxy_ids)
       .by_environment(environment)
@@ -22,13 +17,9 @@ class FetchProxyConfigsService
       .by_version(version)
   end
 
-  def self.call(**args)
-    new(**args).call
-  end
-
   private
 
-  attr_reader :environment, :host, :version, :watcher, :owner
+  attr_reader :watcher, :owner
 
   def proxy_ids
     Proxy.where(service_id: service_ids).pluck(:id)
