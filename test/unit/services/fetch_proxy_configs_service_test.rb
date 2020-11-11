@@ -90,31 +90,23 @@ class FetchProxyConfigsServiceTest < ActiveSupport::TestCase
     member_with_sections_permissions_but_empty_services.update!(member_permission_service_ids: '[]')
 
 
+    all_proxy_config_ids = ProxyConfig.for_services(provider.services).by_environment(ProxyConfig::ENVIRONMENTS.first).select(:id).map(&:id)
+
+
     rolling_update(:service_permissions, enabled: true)
-
-    assert_same_elements(ProxyConfig.for_services(provider.services).by_environment(ProxyConfig::ENVIRONMENTS.first).select(:id).map(&:id),
-                         fetch_proxy_configs(owner: provider, watcher: admin).select(:id).map(&:id))
-
-    assert_same_elements(ProxyConfig.for_services(provider.services).by_environment(ProxyConfig::ENVIRONMENTS.first).select(:id).map(&:id),
-                         fetch_proxy_configs(owner: provider, watcher: member_access_all_services).select(:id).map(&:id))
-
+    [admin, member_access_all_services].each do |user|
+      assert_same_elements all_proxy_config_ids, fetch_proxy_configs(owner: provider, watcher: user).select(:id).map(&:id)
+    end
     assert_same_elements(ProxyConfig.for_services(services[0..1]).by_environment(ProxyConfig::ENVIRONMENTS.first).select(:id).map(&:id),
                          fetch_proxy_configs(owner: provider, watcher: member_access_some_services).select(:id).map(&:id))
-
     assert_empty fetch_proxy_configs(owner: provider, watcher: member_with_sections_permissions_but_empty_services)
 
 
 
     rolling_update(:service_permissions, enabled: false)
-
-    assert_same_elements(ProxyConfig.for_services(provider.services).by_environment(ProxyConfig::ENVIRONMENTS.first).select(:id).map(&:id),
-                         fetch_proxy_configs(owner: provider, watcher: admin).select(:id).map(&:id))
-
-    assert_same_elements(ProxyConfig.for_services(provider.services).by_environment(ProxyConfig::ENVIRONMENTS.first).select(:id).map(&:id),
-                         fetch_proxy_configs(owner: provider, watcher: member_access_all_services).select(:id).map(&:id))
-
-    assert_same_elements(ProxyConfig.for_services(provider.services).by_environment(ProxyConfig::ENVIRONMENTS.first).select(:id).map(&:id),
-                         fetch_proxy_configs(owner: provider, watcher: member_access_some_services).select(:id).map(&:id))
+    [admin,member_access_all_services, member_access_some_services, member_with_sections_permissions_but_empty_services].each do |user|
+      assert_same_elements all_proxy_config_ids, fetch_proxy_configs(owner: provider, watcher: user).select(:id).map(&:id)
+    end
   end
 
   test 'search filters accessible services only' do
